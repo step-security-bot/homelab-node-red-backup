@@ -13,11 +13,16 @@ jobs:
     name: Conform
 
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
-      - uses: siderolabs/conform@v0.1.0-alpha.27
+      - uses: siderolabs/conform@6380738b7fdfc68b208ce0674c4ac1ba314ba600 # v0.1.0-alpha.27
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -37,21 +42,26 @@ jobs:
         poetry-version: [1.7.1]
 
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        with:
+          egress-policy: audit
+
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up Poetry ${{ matrix.poetry-version }}
-        uses: abatilo/actions-poetry@v3
+        uses: abatilo/actions-poetry@7b6d33e44b4f08d7021a1dee3c044e9c253d6439 # v3.0.0
         with:
           poetry-version: ${{ matrix.poetry-version }}
 
-      - uses: hashicorp/vault-action@v3
+      - uses: hashicorp/vault-action@d1720f055e0635fd932a1d2a48f87a666a57906c # v3.0.0
         id: import-secrets
         with:
           method: jwt
@@ -62,7 +72,7 @@ jobs:
             github-homelab-node-red-backup/data/snyk token | SNYK_TOKEN
 
       - name: Set up Snyk
-        uses: snyk/actions/setup@master
+        uses: snyk/actions/setup@cdb760004ba9ea4d525f2e043745dfe85bb9077e # master
 
       - name: Install dependencies
         run: |
@@ -76,7 +86,7 @@ jobs:
           snyk test --package-manager=poetry --fail-on=all --severity-threshold=medium --remote-repo-url=${{ github.server_url }}/${{ github.repository }} --sarif-file-output=snyk.sarif
 
       - name: Upload to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@662472033e021d55d94146f66f6058822b0b39fd # v3.27.0
         with:
           sarif_file: snyk.sarif
 
@@ -90,17 +100,22 @@ jobs:
         poetry-version: [1.7.1]
 
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        with:
+          egress-policy: audit
+
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up Poetry ${{ matrix.poetry-version }}
-        uses: abatilo/actions-poetry@v3
+        uses: abatilo/actions-poetry@7b6d33e44b4f08d7021a1dee3c044e9c253d6439 # v3.0.0
         with:
           poetry-version: ${{ matrix.poetry-version }}
 
@@ -123,13 +138,18 @@ jobs:
         python-version: ["3.12"]
 
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        with:
+          egress-policy: audit
+
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: ${{ matrix.python-version }}
 
